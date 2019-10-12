@@ -8,6 +8,8 @@ const renderElement = ({tagName, attrs, children}) => {
     for(const child of children) {
         $el.appendChild(render(child));
     }
+
+    return $el;
 }
 
 const render = (vNode) => {
