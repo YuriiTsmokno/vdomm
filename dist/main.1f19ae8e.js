@@ -209,12 +209,28 @@ var render = function render(vNode) {
 
 var _default = render;
 exports.default = _default;
+},{}],"vdom/mount.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _default = function _default($node, $target) {
+  $target.replaceWith($node);
+  return $node;
+};
+
+exports.default = _default;
 },{}],"main.js":[function(require,module,exports) {
 "use strict";
 
 var _createElement = _interopRequireDefault(require("./vdom/createElement"));
 
 var _render = _interopRequireDefault(require("./vdom/render"));
+
+var _mount = _interopRequireDefault(require("./vdom/mount"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -229,8 +245,8 @@ var vApp = (0, _createElement.default)('div', {
   })]
 });
 var $app = (0, _render.default)(vApp);
-console.log($app);
-},{"./vdom/createElement":"vdom/createElement.js","./vdom/render":"vdom/render.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+(0, _mount.default)($app, document.querySelector('#app')); //console.log($app);
+},{"./vdom/createElement":"vdom/createElement.js","./vdom/render":"vdom/render.js","./vdom/mount":"vdom/mount.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -258,7 +274,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52022" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53854" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
