@@ -234,18 +234,28 @@ var _mount = _interopRequireDefault(require("./vdom/mount"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var vApp = (0, _createElement.default)('div', {
-  attrs: {
-    id: 'app'
-  },
-  children: ['Hello World', (0, _createElement.default)('img', {
+var createVApp = function createVApp(count) {
+  return (0, _createElement.default)('div', {
     attrs: {
-      src: 'https://media.giphy.com/media/cuPm4p4pClZVC/giphy.gif'
-    }
-  })]
-});
+      id: 'app',
+      dataCount: count
+    },
+    children: ['The current count is: ', String(count), (0, _createElement.default)('img', {
+      attrs: {
+        src: 'https://media.giphy.com/media/cuPm4p4pClZVC/giphy.gif'
+      }
+    })]
+  });
+};
+
+var count = 0;
+var vApp = createVApp(count);
 var $app = (0, _render.default)(vApp);
-(0, _mount.default)($app, document.querySelector('#app')); //console.log($app);
+var $rootEl = (0, _mount.default)($app, document.querySelector('#app'));
+setInterval(function () {
+  count++;
+  $rootEl = (0, _mount.default)((0, _render.default)(createVApp(count)), $rootEl);
+}, 1000); //console.log($app);
 },{"./vdom/createElement":"vdom/createElement.js","./vdom/render":"vdom/render.js","./vdom/mount":"vdom/mount.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
@@ -274,7 +284,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53854" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54621" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
