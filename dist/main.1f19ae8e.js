@@ -240,7 +240,7 @@ var createVApp = function createVApp(count) {
       id: 'app',
       dataCount: count
     },
-    children: ['The current count is: ', String(count), (0, _createElement.default)('img', {
+    children: [(0, _createElement.default)('input'), 'The current count is: ', String(count), (0, _createElement.default)('img', {
       attrs: {
         src: 'https://media.giphy.com/media/cuPm4p4pClZVC/giphy.gif'
       }
@@ -284,7 +284,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54621" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58829" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
