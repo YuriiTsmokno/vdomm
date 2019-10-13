@@ -18,6 +18,6 @@ const render = (vNode) => {
    }
 
    return renderElement(vNode);
-}
+};
 
 export default render;

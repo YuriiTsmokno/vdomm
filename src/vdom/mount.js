@@ -1,5 +1,4 @@
 export default ($node, $target) => {
-    $target.replaceWith($node);
-    
+    $target.replaceWith($node);  
     return $node;
 };
