@@ -12,23 +12,21 @@ const createVApp = count => createElement('div', {
         createElement('input'),
         'The current count is: ',
         String(count),
-        createElement('img', {
+        ...Array.from({ length: count }, () => createElement('img', {
             attrs: {
                 src: 'https://media.giphy.com/media/cuPm4p4pClZVC/giphy.gif'
             }
-        })
+        }))
     ]
 });
 
-let count = 0;
-
-const vApp = createVApp(count);
+const vApp = createVApp(0);
 const $app = render(vApp);
 let $rootEl = mount($app, document.querySelector('#app'));
 
 setInterval(() => {
-    count++;
-    const vNewApp = createVApp(count);
+    const n = Math.floor(Math.random() * 10);
+    const vNewApp = createVApp(n);
     const patch = diff(vApp, vNewApp);
 
     $rootEl = patch($rootEl);

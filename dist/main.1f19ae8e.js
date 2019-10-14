@@ -462,6 +462,14 @@ var _diff = _interopRequireDefault(require("./vdom/diff"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
 function _readOnlyError(name) { throw new Error("\"" + name + "\" is read-only"); }
 
 var createVApp = function createVApp(count) {
@@ -470,21 +478,24 @@ var createVApp = function createVApp(count) {
       id: 'app',
       dataCount: count
     },
-    children: [(0, _createElement.default)('input'), 'The current count is: ', String(count), (0, _createElement.default)('img', {
-      attrs: {
-        src: 'https://media.giphy.com/media/cuPm4p4pClZVC/giphy.gif'
-      }
-    })]
+    children: [(0, _createElement.default)('input'), 'The current count is: ', String(count)].concat(_toConsumableArray(Array.from({
+      length: count
+    }, function () {
+      return (0, _createElement.default)('img', {
+        attrs: {
+          src: 'https://media.giphy.com/media/cuPm4p4pClZVC/giphy.gif'
+        }
+      });
+    })))
   });
 };
 
-var count = 0;
-var vApp = createVApp(count);
+var vApp = createVApp(0);
 var $app = (0, _render.default)(vApp);
 var $rootEl = (0, _mount.default)($app, document.querySelector('#app'));
 setInterval(function () {
-  count++;
-  var vNewApp = createVApp(count);
+  var n = Math.floor(Math.random() * 10);
+  var vNewApp = createVApp(n);
   var patch = (0, _diff.default)(vApp, vNewApp);
   $rootEl = patch($rootEl);
   vApp = (_readOnlyError("vApp"), vNewApp);
@@ -517,7 +528,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50012" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50396" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
