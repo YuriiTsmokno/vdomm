@@ -1,6 +1,7 @@
 import createElement from './vdom/createElement';
 import render from './vdom/render';
 import mount from './vdom/mount';
+import diff from './vdom/diff';
 
 const createVApp = count => createElement('div', {
     attrs: {
@@ -27,6 +28,12 @@ let $rootEl = mount($app, document.querySelector('#app'));
 
 setInterval(() => {
     count++;
-    $rootEl = mount(render(createVApp(count)), $rootEl);
+    const vNewApp = createVApp(count);
+    const patch = diff(vApp, vNewApp);
+
+    $rootEl = patch($rootEl);
+
+    vApp = vNewApp;
+    
 }, 1000);
 //console.log($app);

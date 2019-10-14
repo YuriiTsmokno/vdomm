@@ -10,7 +10,7 @@ const renderElement = ({tagName, attrs, children}) => {
     }
 
     return $el;
-}
+};
 
 const render = (vNode) => {
    if(typeof vNode === 'string') {

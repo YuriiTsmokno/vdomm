@@ -223,7 +223,233 @@ var _default = function _default($node, $target) {
 };
 
 exports.default = _default;
-},{}],"main.js":[function(require,module,exports) {
+},{}],"vdom/diff.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _render = _interopRequireDefault(require("./render"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
+
+function _iterableToArrayLimit(arr, i) { if (!(Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === "[object Arguments]")) { return; } var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+var zip = function zip(xs, ys) {
+  var zipped = [];
+
+  for (var i = 0; i < Math.min(xs.length, ys.length); i++) {
+    zipped.push([xs[i], ys[i]]);
+  }
+
+  return zipped;
+};
+
+var diffChildren = function diffChildren(oldVChildren, newVChildren) {
+  var childPatches = [];
+  oldVChildren.forEach(function (oldVChild, i) {
+    childPatches.push(diff(oldVChild, newVChildren[i]));
+  });
+  var additionalPatches = [];
+  var _iteratorNormalCompletion = true;
+  var _didIteratorError = false;
+  var _iteratorError = undefined;
+
+  try {
+    var _loop = function _loop() {
+      var additionalVChild = _step.value;
+      additionalPatches.push(function ($node) {
+        $node.appendChild((0, _render.default)(additionalVChild));
+        return $node;
+      });
+    };
+
+    for (var _iterator = newVChildren.slice(oldVChildren.length)[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+      _loop();
+    }
+  } catch (err) {
+    _didIteratorError = true;
+    _iteratorError = err;
+  } finally {
+    try {
+      if (!_iteratorNormalCompletion && _iterator.return != null) {
+        _iterator.return();
+      }
+    } finally {
+      if (_didIteratorError) {
+        throw _iteratorError;
+      }
+    }
+  }
+
+  ;
+  return function ($parent) {
+    var _iteratorNormalCompletion2 = true;
+    var _didIteratorError2 = false;
+    var _iteratorError2 = undefined;
+
+    try {
+      for (var _iterator2 = zip(childPatches, $parent.childNodes)[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+        var _step2$value = _slicedToArray(_step2.value, 2),
+            patch = _step2$value[0],
+            $child = _step2$value[1];
+
+        patch($child);
+      }
+    } catch (err) {
+      _didIteratorError2 = true;
+      _iteratorError2 = err;
+    } finally {
+      try {
+        if (!_iteratorNormalCompletion2 && _iterator2.return != null) {
+          _iterator2.return();
+        }
+      } finally {
+        if (_didIteratorError2) {
+          throw _iteratorError2;
+        }
+      }
+    }
+
+    var _iteratorNormalCompletion3 = true;
+    var _didIteratorError3 = false;
+    var _iteratorError3 = undefined;
+
+    try {
+      for (var _iterator3 = additionalPatches[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+        var _patch = _step3.value;
+
+        _patch($parent);
+      }
+    } catch (err) {
+      _didIteratorError3 = true;
+      _iteratorError3 = err;
+    } finally {
+      try {
+        if (!_iteratorNormalCompletion3 && _iterator3.return != null) {
+          _iterator3.return();
+        }
+      } finally {
+        if (_didIteratorError3) {
+          throw _iteratorError3;
+        }
+      }
+    }
+
+    return $parent;
+  };
+};
+
+var diffAttrs = function diffAttrs(oldAttrs, newAttrs) {
+  var patches = [];
+
+  var _loop3 = function _loop3() {
+    var _Object$entries$_i = _slicedToArray(_Object$entries[_i2], 2),
+        key = _Object$entries$_i[0],
+        value = _Object$entries$_i[1];
+
+    patches.push(function ($node) {
+      $node.setAttribute(key, value);
+      return $node;
+    });
+  };
+
+  for (var _i2 = 0, _Object$entries = Object.entries(newAttrs); _i2 < _Object$entries.length; _i2++) {
+    _loop3();
+  }
+
+  var _loop2 = function _loop2(key) {
+    if (!(key in newAttrs)) {
+      patches.push(function ($node) {
+        $node.removeAttribute(key);
+        return $node;
+      });
+    }
+  };
+
+  for (var key in oldAttrs) {
+    _loop2(key);
+  }
+
+  return function ($node) {
+    var _iteratorNormalCompletion4 = true;
+    var _didIteratorError4 = false;
+    var _iteratorError4 = undefined;
+
+    try {
+      for (var _iterator4 = patches[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+        var patch = _step4.value;
+        patch($node);
+      }
+    } catch (err) {
+      _didIteratorError4 = true;
+      _iteratorError4 = err;
+    } finally {
+      try {
+        if (!_iteratorNormalCompletion4 && _iterator4.return != null) {
+          _iterator4.return();
+        }
+      } finally {
+        if (_didIteratorError4) {
+          throw _iteratorError4;
+        }
+      }
+    }
+
+    return $node;
+  };
+};
+
+var diff = function diff(oldVTree, newVTree) {
+  if (newVTree === undefined) {
+    return function ($node) {
+      $node.remove();
+      return undefined;
+    };
+  }
+
+  if (typeof oldVTree === 'string' || typeof newVTree === 'string') {
+    if (oldVTree !== newVTree) {
+      return function ($node) {
+        var $newNode = (0, _render.default)(newVTree);
+        $node.replaceWith($newNode);
+        return $newNode;
+      };
+    } else {
+      return function ($node) {
+        return $node;
+      };
+    }
+  }
+
+  if (oldVTree.tagName !== newVTree.tagName) {
+    return function ($node) {
+      var $newNode = (0, _render.default)(newVTree);
+      $node.replaceWith($newNode);
+      return $newNode;
+    };
+  }
+
+  var patchAttrs = diffAttrs(oldVTree.attrs, newVTree.attrs);
+  var patchChildren = diffChildren(oldVTree.children, newVTree.children);
+  return function ($node) {
+    patchAttrs($node);
+    patchChildren($node);
+    return $node;
+  };
+};
+
+var _default = diff;
+exports.default = _default;
+},{"./render":"vdom/render.js"}],"main.js":[function(require,module,exports) {
 "use strict";
 
 var _createElement = _interopRequireDefault(require("./vdom/createElement"));
@@ -232,7 +458,11 @@ var _render = _interopRequireDefault(require("./vdom/render"));
 
 var _mount = _interopRequireDefault(require("./vdom/mount"));
 
+var _diff = _interopRequireDefault(require("./vdom/diff"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _readOnlyError(name) { throw new Error("\"" + name + "\" is read-only"); }
 
 var createVApp = function createVApp(count) {
   return (0, _createElement.default)('div', {
@@ -254,9 +484,12 @@ var $app = (0, _render.default)(vApp);
 var $rootEl = (0, _mount.default)($app, document.querySelector('#app'));
 setInterval(function () {
   count++;
-  $rootEl = (0, _mount.default)((0, _render.default)(createVApp(count)), $rootEl);
+  var vNewApp = createVApp(count);
+  var patch = (0, _diff.default)(vApp, vNewApp);
+  $rootEl = patch($rootEl);
+  vApp = (_readOnlyError("vApp"), vNewApp);
 }, 1000); //console.log($app);
-},{"./vdom/createElement":"vdom/createElement.js","./vdom/render":"vdom/render.js","./vdom/mount":"vdom/mount.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./vdom/createElement":"vdom/createElement.js","./vdom/render":"vdom/render.js","./vdom/mount":"vdom/mount.js","./vdom/diff":"vdom/diff.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -284,7 +517,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58829" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50012" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
